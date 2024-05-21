@@ -31,7 +31,7 @@ public class Publisher {
     }
 
     @OneToMany(mappedBy = "publisher")
-    private Set<Book> books = new HashSet<>();
+    private Set<Book> books;
 
     public String getPublisherName() {
         return publisherName;

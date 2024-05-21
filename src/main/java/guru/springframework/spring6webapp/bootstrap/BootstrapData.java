@@ -9,6 +9,8 @@ import guru.springframework.spring6webapp.repositories.PublisherRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
+import java.util.logging.Logger;
+
 @Component
 public class BootstrapData implements CommandLineRunner {
 
@@ -16,6 +18,9 @@ public class BootstrapData implements CommandLineRunner {
     private final AuthorRepository authorRepository;
 
     private final PublisherRepository publisherRepository;
+
+    Logger logger = Logger.getLogger(getClass().getName());
+
 
     public BootstrapData(BookRepository bookRepository,
                          AuthorRepository authorRepository,
@@ -33,7 +38,7 @@ public class BootstrapData implements CommandLineRunner {
 
         Book ddd = new Book();
         ddd.setTitle("Domain Driven Design");
-        ddd.setIsbn("1234");
+        ddd.setIsbn("123456");
 
         Author ericSaved = authorRepository.save(eric);
         Book dddSaved = bookRepository.save(ddd);
@@ -44,7 +49,7 @@ public class BootstrapData implements CommandLineRunner {
 
         Book noEJB = new Book();
         noEJB.setTitle("J2EE Development without EJB");
-        noEJB.setIsbn("2345");
+        noEJB.setIsbn("54757585");
 
         Author rodSaved = authorRepository.save(rod);
         Book noEJBSaved = bookRepository.save(noEJB);
@@ -54,26 +59,23 @@ public class BootstrapData implements CommandLineRunner {
         dddSaved.getAuthors().add(ericSaved);
         noEJBSaved.getAuthors().add(rodSaved);
 
+        Publisher publisher = new Publisher();
+        publisher.setPublisherName("My Publisher");
+        publisher.setAddress("123 Main");
+        Publisher savedPublisher = publisherRepository.save(publisher);
+
+        dddSaved.setPublisher(savedPublisher);
+        noEJBSaved.setPublisher(savedPublisher);
+
         authorRepository.save(ericSaved);
         authorRepository.save(rodSaved);
-
-        Publisher publisher = new Publisher();
-        publisher.setPublisherName("SFG Publishing");
-        publisher.setCity("St Petersburg");
-        publisher.setState("FL");
-        publisher.setAddress("1234 Main St");
-        publisher.setZip("33701");
-
-        Publisher publisherSaved = publisherRepository.save(publisher);
-        dddSaved.setPublisher(publisherSaved);
-        noEJB.setPublisher(publisherSaved);
-
         bookRepository.save(dddSaved);
         bookRepository.save(noEJBSaved);
 
-        System.out.println("Started in Bootstrap");
-        System.out.println("Number of Books: " + bookRepository.count());
-        System.out.println("Number of Authors: " + authorRepository.count());
-        System.out.println("Number of Publishers: " + publisherRepository.count());
+        System.out.println("In Bootstrap");
+        System.out.println("Author Count: " + authorRepository.count());
+        System.out.println("Book Count: " + bookRepository.count());
+
+        System.out.println("Publisher Count: " + publisherRepository.count());
     }
 }
